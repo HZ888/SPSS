@@ -14,14 +14,14 @@ EXECUTE.
 *IESR
 
 GET
-  FILE='Y:\Rech\SKing\RA\Research Staff\HZ\Handedness\Analysis and manuscripts\SPSS DATA\SPSS '+
-    'DATA FILES ORIGINAL\Current_Iowa_Flood_Predictors_SYS.sav'.
+  FILE='Y: '+
+    'DATA FILES xxx.sav'.
 DATASET NAME IESR WINDOW=FRONT.
 
 
 GET
-  FILE='Y:\Rech\SKing\RA\Research Staff\HZ\Handedness\Analysis and '+
-    'manuscripts\Analyses\30mon_Handedness_Iowa Flood.sav'.
+  FILE='Y: and '+
+    'xxx.sav'.
 DATASET NAME Handedness WINDOW=FRONT.
 
 
@@ -374,18 +374,18 @@ DESCRIPTIVES VARIABLES=Questionnaires_A01Mixed VMI_A01Mixed Communication_A01Mix
 
 *ADD ses, depression, birthweight, and life events to the database.
 
-SAVE OUTFILE='Y:\Rech\SKing\RA\Research Staff\HZ\Handedness\Analysis and manuscripts\SPSS DATA\SPSS DATA FILES ORIGINAL\30mon_Handedness_Iowa Flood_with All variables_SES, BIRTHWEIGHT,SYS.sav'
+SAVE OUTFILE='Y:xxx and xxx,SYS.sav'
   /COMPRESSED.
 
 
 GET
-  FILE='Y:\Rech\SKing\RA\Research Staff\HZ\Handedness\Analysis and manuscripts\SPSS DATA\SPSS '+
+  FILE='Y:\xxx '+
     'DATA FILES ORIGINAL\30mon_Handedness_Iowa Flood_with All variables_SES, BIRTHWEIGHT,SYS.sav'.
 DATASET NAME SES WINDOW=FRONT.
 
 GET
-  FILE='Y:\Rech\SKing\RA\Research Staff\HZ\Handedness\Analysis and '+
-    'manuscripts\Analyses\30mon_Handedness_Iowa Flood.sav'.
+  FILE='Y:xxx and '+
+    'xxx.sav'.
 DATASET NAME Handedness WINDOW=FRONT.
 
 SORT CASES by ID.
@@ -397,7 +397,7 @@ MATCH FILES /FILE=*
 EXECUTE.
 
 
-SAVE OUTFILE='Y:\Rech\SKing\RA\Research Staff\HZ\Handedness\Analysis and manuscripts\Analyses\30mon_Handedness_Iowa Flood.sav'
+SAVE OUTFILE='Y:\xxx and xxx.sav'
   /COMPRESSED.
 
 *correlations between flood variables and independent variables.
@@ -483,10 +483,10 @@ CROSSTABS
 * get girls`and boys`handedness.
 
 GET
-  FILE='Y:\Rech\SKing\RA\Research Staff\HZ\Handedness\Analysis and manuscripts\Analyses\30mon_Handedness_Iowa Flood_GIRLS.sav'.
+  FILE='Y:\xxx and xxx.sav'.
 DATASET NAME GIRLS WINDOW=FRONT.
 
 GET
-  FILE='Y:\Rech\SKing\RA\Research Staff\HZ\Handedness\Analysis and '+
-    'manuscripts\Analyses\30mon_Handedness_Iowa Flood_GUYS.sav'.
+  FILE='Y:\xxxs and '+
+    'xxx.sav'.
 DATASET NAME GUYS WINDOW=FRONT.
