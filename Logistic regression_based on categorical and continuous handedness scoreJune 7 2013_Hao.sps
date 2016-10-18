@@ -1,0 +1,296 @@
+*Database correction.
+USE ALL.
+COMPUTE filter_$=(Exposuredays_269_OUT > 0).
+VARIABLE LABELS filter_$ 'Exposuredays_269_OUT > 0 (FILTER)'.
+VALUE LABELS filter_$ 0 'Not Selected' 1 'Selected'.
+FORMATS filter_$ (f1.0).
+FILTER BY filter_$.
+EXECUTE.
+
+*.
+FREQUENCIES VARIABLES=VMI_A01 Communication_A01 Manipulation_A01 Questionnaire_A01
+  /STATISTICS=STDDEV RANGE MEAN
+  /HISTOGRAM NORMAL
+  /ORDER=ANALYSIS.
+
+*Correlation tables.
+CORRELATIONS
+  /VARIABLES= IF100_OUT_LN IESR_OUT_LN exposuredays_269_Out Sexbebe Fetalrisk2_Modified P1_A01 P2_A01 Smokedays_OUT_Transformed Alcoholwk_OUT_Transformed
+  BIRTHWEIGHT IDASGENDEP_OUT LES_TOT HOUSESES_H with VMI_A Communication_A01 Manipulation_A01 Questionnaire_A01
+  /PRINT=TWOTAIL NOSIG
+  /MISSING=PAIRWISE.
+
+CORRELATIONS
+  /VARIABLES= IF100_OUT_LN IESR_OUT_LN exposuredays_269_Out Sexbebe Fetalrisk2_Modified IDASGENDEP_OUT LES_TOT 
+  with VMI_A Communication_A01 Manipulation_A01 Questionnaire_A01
+  /PRINT=TWOTAIL NOSIG
+  /MISSING=PAIRWISE.
+
+* Curve Estimation VMI_A.
+TSET NEWVAR=NONE.
+CURVEFIT
+  /VARIABLES=VMI_A WITH IF100_OUT_LN
+  /CONSTANT
+  /MODEL=LINEAR QUADRATIC 
+  /PLOT FIT.
+
+TSET NEWVAR=NONE.
+CURVEFIT
+  /VARIABLES=VMI_A WITH IESR_OUT_LN
+  /CONSTANT
+  /MODEL=LINEAR QUADRATIC 
+  /PLOT FIT.
+
+TSET NEWVAR=NONE.
+CURVEFIT
+  /VARIABLES=VMI_A WITH Exposuredays_269_OUT
+  /CONSTANT
+  /MODEL=LINEAR QUADRATIC 
+  /PLOT FIT.
+
+*VMI_A.
+LOGISTIC REGRESSION VARIABLES VMI_A
+  /METHOD=ENTER IF100_OUT_LN 
+  /METHOD=ENTER IESR_OUT_LN 
+  /METHOD=ENTER exposuredays_269_OUT
+  /METHOD=ENTER Sexbebe 
+  /METHOD=ENTER Fetalrisk2_Modified
+  /METHOD=FSTEP IF100_IESR IF100_Exposuredays IF100_Sexbebe IESR_Exposuredays IESR_Sexbebe Exposuredays_sexbebe
+  /PRINT=CI(95)
+  /CRITERIA=PIN(.05) POUT(.10) ITERATE(20) CUT(.5).
+
+*VMI_A trimmed by deleting IESR.
+LOGISTIC REGRESSION VARIABLES VMI_A
+  /METHOD=ENTER IF100_OUT_LN 
+  /METHOD=ENTER exposuredays_269_OUT
+  /METHOD=ENTER Sexbebe 
+  /METHOD=ENTER Fetalrisk2_Modified
+  /METHOD=FSTEP IF100_Exposuredays IF100_Sexbebe Exposuredays_sexbebe
+  /PRINT=CI(95)
+  /CRITERIA=PIN(.05) POUT(.10) ITERATE(20) CUT(.5).
+
+*VMI_A trimmed by deleting IESR & Exposuredays.
+LOGISTIC REGRESSION VARIABLES VMI_A
+  /METHOD=ENTER IF100_OUT_LN 
+  /METHOD=ENTER Sexbebe 
+  /METHOD=ENTER Fetalrisk2_Modified
+  /METHOD=FSTEP IF100_Sexbebe
+  /PRINT=CI(95)
+  /CRITERIA=PIN(.05) POUT(.10) ITERATE(20) CUT(.5).
+
+*VMI_A trimmed by deleting IESR & Exposuredays & Fetal risk.
+LOGISTIC REGRESSION VARIABLES VMI_A
+  /METHOD=ENTER IF100_OUT_LN 
+  /METHOD=ENTER Sexbebe 
+  /METHOD=FSTEP IF100_Sexbebe
+  /PRINT=CI(95)
+  /CRITERIA=PIN(.05) POUT(.10) ITERATE(20) CUT(.5).
+
+LOGISTIC REGRESSION VARIABLES VMI_A
+  /METHOD=ENTER IF100_OUT_LN 
+  /METHOD=ENTER IESR_OUT_LN 
+  /METHOD=ENTER exposuredays_269_OUT
+  /METHOD=ENTER Sexbebe 
+  /METHOD=ENTER Fetalrisk2_Modified
+  /METHOD=BSTEP IF100_IESR IF100_Exposuredays IF100_Sexbebe IESR_Exposuredays IESR_Sexbebe Exposuredays_sexbebe
+  /PRINT=CI(95)
+  /CRITERIA=PIN(.05) POUT(.10) ITERATE(20) CUT(.5).
+
+* Curve Estimation Communication_A01.
+TSET NEWVAR=NONE.
+CURVEFIT
+  /VARIABLES=Communication_A01 WITH IF100_OUT_LN
+  /CONSTANT
+  /MODEL=LINEAR QUADRATIC 
+  /PLOT FIT.
+
+TSET NEWVAR=NONE.
+CURVEFIT
+  /VARIABLES=Communication_A01 WITH IESR_OUT_LN
+  /CONSTANT
+  /MODEL=LINEAR QUADRATIC 
+  /PLOT FIT.
+
+TSET NEWVAR=NONE.
+CURVEFIT
+  /VARIABLES=Communication_A01 WITH Exposuredays_269_OUT
+  /CONSTANT
+  /MODEL=LINEAR QUADRATIC 
+  /PLOT FIT.
+
+*Communication_A01.
+LOGISTIC REGRESSION VARIABLES Communication_A01
+  /METHOD=ENTER IF100_OUT_LN 
+  /METHOD=ENTER IESR_OUT_LN 
+  /METHOD=ENTER exposuredays_269_OUT
+  /METHOD=ENTER Sexbebe 
+  /METHOD=ENTER Fetalrisk2_Modified
+  /METHOD=FSTEP IF100_IESR IF100_Exposuredays IF100_Sexbebe IESR_Exposuredays IESR_Sexbebe Exposuredays_sexbebe
+  /PRINT=CI(95)
+  /CRITERIA=PIN(.05) POUT(.10) ITERATE(20) CUT(.5).
+
+*Communication_A01 trimmed by deleting IESR.
+LOGISTIC REGRESSION VARIABLES Communication_A01
+  /METHOD=ENTER IF100_OUT_LN 
+  /METHOD=ENTER exposuredays_269_OUT
+  /METHOD=ENTER Sexbebe 
+  /METHOD=ENTER Fetalrisk2_Modified
+  /METHOD=FSTEP IF100_Exposuredays IF100_Sexbebe Exposuredays_sexbebe
+  /PRINT=CI(95)
+  /CRITERIA=PIN(.05) POUT(.10) ITERATE(20) CUT(.5).
+
+*Communication_A01 trimmed by deleting IESR & Sexbebe.
+LOGISTIC REGRESSION VARIABLES Communication_A01
+  /METHOD=ENTER IF100_OUT_LN 
+  /METHOD=ENTER exposuredays_269_OUT
+  /METHOD=ENTER Fetalrisk2_Modified
+  /METHOD=FSTEP IF100_Exposuredays
+  /PRINT=CI(95)
+  /CRITERIA=PIN(.05) POUT(.10) ITERATE(20) CUT(.5).
+
+*Communication_A01 trimmed by deleting IESR & Sexbebe & Fetal risk.
+LOGISTIC REGRESSION VARIABLES Communication_A01
+  /METHOD=ENTER IF100_OUT_LN 
+  /METHOD=ENTER exposuredays_269_OUT
+  /METHOD=FSTEP IF100_Exposuredays
+  /PRINT=CI(95)
+  /CRITERIA=PIN(.05) POUT(.10) ITERATE(20) CUT(.5).
+
+LOGISTIC REGRESSION VARIABLES Communication_A01
+  /METHOD=ENTER IF100_OUT_LN 
+  /METHOD=ENTER IESR_OUT_LN 
+  /METHOD=ENTER exposuredays_269_OUT
+  /METHOD=ENTER Sexbebe 
+  /METHOD=ENTER Fetalrisk2_Modified
+  /METHOD=BSTEP IF100_IESR IF100_Exposuredays IF100_Sexbebe IESR_Exposuredays IESR_Sexbebe Exposuredays_sexbebe
+  /PRINT=CI(95)
+  /CRITERIA=PIN(.05) POUT(.10) ITERATE(20) CUT(.5).
+
+* Curve Estimation Manipulation_A01.
+TSET NEWVAR=NONE.
+CURVEFIT
+  /VARIABLES=Manipulation_A01 WITH IF100_OUT_LN
+  /CONSTANT
+  /MODEL=LINEAR QUADRATIC 
+  /PLOT FIT.
+
+TSET NEWVAR=NONE.
+CURVEFIT
+  /VARIABLES=Manipulation_A01 WITH IESR_OUT_LN
+  /CONSTANT
+  /MODEL=LINEAR QUADRATIC 
+  /PLOT FIT.
+
+TSET NEWVAR=NONE.
+CURVEFIT
+  /VARIABLES=Manipulation_A01 WITH Exposuredays_269_OUT
+  /CONSTANT
+  /MODEL=LINEAR QUADRATIC 
+  /PLOT FIT.
+
+*Manipulation_A01.
+LOGISTIC REGRESSION VARIABLES Manipulation_A01
+  /METHOD=ENTER IF100_OUT_LN 
+  /METHOD=ENTER IESR_OUT_LN 
+  /METHOD=ENTER exposuredays_269_OUT 
+  /METHOD=ENTER Sexbebe
+  /METHOD=ENTER Fetalrisk2_Modified
+  /METHOD=FSTEP IF100_IESR IF100_Exposuredays IF100_Sexbebe IESR_Exposuredays IESR_Sexbebe Exposuredays_sexbebe
+  /PRINT=CI(95)
+  /CRITERIA=PIN(0.05) POUT(0.10) ITERATE(20) CUT(0.5).
+
+*Manipulation_A01 trimmed by deleting IF100.
+LOGISTIC REGRESSION VARIABLES Manipulation_A01
+  /METHOD=ENTER IESR_OUT_LN 
+  /METHOD=ENTER exposuredays_269_OUT 
+  /METHOD=ENTER Sexbebe
+  /METHOD=ENTER Fetalrisk2_Modified
+  /METHOD=FSTEP IESR_Exposuredays IESR_Sexbebe Exposuredays_sexbebe
+  /PRINT=CI(95)
+  /CRITERIA=PIN(0.05) POUT(0.10) ITERATE(20) CUT(0.5).
+
+*Manipulation_A01 trimmed by deleting IF100 & Exposuredays.
+LOGISTIC REGRESSION VARIABLES Manipulation_A01
+  /METHOD=ENTER IESR_OUT_LN 
+  /METHOD=ENTER Sexbebe
+  /METHOD=ENTER Fetalrisk2_Modified
+  /METHOD=FSTEP IESR_Sexbebe
+  /PRINT=CI(95)
+  /CRITERIA=PIN(0.05) POUT(0.10) ITERATE(20) CUT(0.5).
+
+*Manipulation_A01 trimmed by deleting IF100 & Exposuredays & IESR.
+LOGISTIC REGRESSION VARIABLES Manipulation_A01
+  /METHOD=ENTER Sexbebe
+  /METHOD=ENTER Fetalrisk2_Modified
+  /PRINT=CI(95)
+  /CRITERIA=PIN(0.05) POUT(0.10) ITERATE(20) CUT(0.5).
+
+LOGISTIC REGRESSION VARIABLES Manipulation_A01
+  /METHOD=ENTER IF100_OUT_LN 
+  /METHOD=ENTER IESR_OUT_LN 
+  /METHOD=ENTER exposuredays_269_OUT 
+  /METHOD=ENTER Sexbebe
+  /METHOD=ENTER Fetalrisk2_Modified
+  /METHOD=BSTEP IF100_IESR IF100_Exposuredays IF100_Sexbebe IESR_Exposuredays IESR_Sexbebe Exposuredays_sexbebe
+  /PRINT=CI(95)
+  /CRITERIA=PIN(0.05) POUT(0.10) ITERATE(20) CUT(0.5).
+
+* Curve Estimation Questionnaire_A01.
+TSET NEWVAR=NONE.
+CURVEFIT
+  /VARIABLES=Questionnaire_A01 WITH IF100_OUT_LN
+  /CONSTANT
+  /MODEL=LINEAR QUADRATIC 
+  /PLOT FIT.
+
+TSET NEWVAR=NONE.
+CURVEFIT
+  /VARIABLES=Questionnaire_A01 WITH IESR_OUT_LN
+  /CONSTANT
+  /MODEL=LINEAR QUADRATIC 
+  /PLOT FIT.
+
+TSET NEWVAR=NONE.
+CURVEFIT
+  /VARIABLES=Questionnaire_A01 WITH Exposuredays_269_OUT
+  /CONSTANT
+  /MODEL=LINEAR QUADRATIC 
+  /PLOT FIT.
+
+*Questionnaire_A01.
+LOGISTIC REGRESSION VARIABLES Questionnaire_A01
+  /METHOD=ENTER IF100_OUT_LN 
+  /METHOD=ENTER IESR_OUT_LN 
+  /METHOD=ENTER exposuredays_269_OUT
+  /METHOD=ENTER Sexbebe
+  /METHOD=ENTER Fetalrisk2_Modified
+  /METHOD=FSTEP IF100_IESR IF100_Exposuredays IF100_Sexbebe IESR_Exposuredays IESR_Sexbebe Exposuredays_sexbebe
+  /PRINT=CI(95)
+  /CRITERIA=PIN(.05) POUT(.10) ITERATE(20) CUT(.5).
+
+*Questionnaire_A01 trimmed by deleting IF100.
+LOGISTIC REGRESSION VARIABLES Questionnaire_A01
+  /METHOD=ENTER IESR_OUT_LN 
+  /METHOD=ENTER exposuredays_269_OUT
+  /METHOD=ENTER Sexbebe
+  /METHOD=ENTER Fetalrisk2_Modified
+  /METHOD=FSTEP IESR_Exposuredays IESR_Sexbebe Exposuredays_sexbebe
+  /PRINT=CI(95)
+  /CRITERIA=PIN(.05) POUT(.10) ITERATE(20) CUT(.5).
+
+*Questionnaire_A01 trimmed by deleting IF100 & Exposuredays.
+LOGISTIC REGRESSION VARIABLES Questionnaire_A01
+  /METHOD=ENTER IESR_OUT_LN 
+  /METHOD=ENTER Sexbebe
+  /METHOD=ENTER Fetalrisk2_Modified
+  /METHOD=FSTEP IESR_Sexbebe
+  /PRINT=CI(95)
+  /CRITERIA=PIN(.05) POUT(.10) ITERATE(20) CUT(.5).
+
+LOGISTIC REGRESSION VARIABLES Questionnaire_A01
+  /METHOD=ENTER IESR_OUT_LN 
+  /METHOD=ENTER Sexbebe
+  /METHOD=ENTER Fetalrisk2_Modified
+  /METHOD=BSTEP IESR_Sexbebe
+  /PRINT=CI(95)
+  /CRITERIA=PIN(.05) POUT(.10) ITERATE(20) CUT(.5).
